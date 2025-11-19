@@ -5,6 +5,9 @@
   <title>부산 문화·예술 행사 안내</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    html {
+      overflow-x:hidden;
+    }
     :root {
       --primary:#0f8edc; --primary-dark:#0b5fa4; --accent:#35d3ff;
       --text:#06203a; --bg:#f4fbff; --card:#ffffff;
@@ -328,7 +331,7 @@
       padding:60px clamp(20px,5vw,100px) 100px;
       max-width:1400px;
       margin:auto;
-      width:calc(100vw - clamp(40px,10vw,140px));
+      width:min(100%, calc(100vw - clamp(40px,10vw,140px)));
       position:relative;
       z-index:1;
     }
