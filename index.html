@@ -329,6 +329,24 @@
       background:rgba(255,255,255,.16);
       transform:translateY(-1px);
     }
+    .btn.secondary {
+      background:rgba(15,142,220,.08);
+      color:var(--primary-dark);
+      border:1px solid rgba(15,142,220,.2);
+    }
+    .btn.secondary.active {
+      background:var(--primary-dark);
+      color:#fff;
+      box-shadow:0 12px 24px rgba(11,95,164,.25);
+    }
+    .btn.ghost {
+      background:transparent;
+      color:var(--primary-dark);
+      border:1px solid rgba(15,142,220,.3);
+    }
+    .btn.ghost:hover {
+      background:rgba(15,142,220,.08);
+    }
     main {
       padding:60px clamp(20px,5vw,100px) 100px;
       max-width:1400px;
@@ -402,6 +420,36 @@
       color:rgba(244,247,255,.9);
     }
     .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:24px; }
+    .favorite-section {
+      margin-top:40px;
+      background:rgba(255,255,255,.92);
+      border-radius:26px;
+      padding:24px;
+      border:1px solid rgba(255,193,7,.2);
+      box-shadow:0 18px 30px rgba(122,79,0,.12);
+    }
+    .favorite-section header {
+      display:flex;
+      flex-wrap:wrap;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:18px;
+    }
+    .favorite-section p {
+      margin:0;
+      color:#6b4a05;
+      font-size:.92rem;
+    }
+    .empty-state {
+      padding:42px 24px;
+      text-align:center;
+      border-radius:22px;
+      border:1px dashed rgba(15,142,220,.3);
+      color:#4b6580;
+      background:rgba(15,142,220,.04);
+      grid-column:1 / -1;
+    }
     .card {
       background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(243,249,255,.92));
       border-radius:20px;
@@ -412,6 +460,55 @@
       position:relative;
       overflow:hidden;
       backdrop-filter:blur(6px);
+    }
+    .card .favorite-btn {
+      position:absolute;
+      top:16px;
+      right:16px;
+      border:1px solid rgba(255,193,7,.45);
+      background:rgba(255,255,255,.96);
+      border-radius:999px;
+      padding:8px 14px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+      box-shadow:0 12px 24px rgba(122,79,0,.18);
+      color:#c68400;
+      font-size:.85rem;
+      font-weight:600;
+      transition:transform .2s, background-color .2s, color .2s, box-shadow .2s;
+      z-index:2;
+    }
+    .card .favorite-btn .favorite-icon {
+      font-size:1.1rem;
+      filter:drop-shadow(0 3px 8px rgba(255,193,7,.55));
+    }
+    .card .favorite-btn .favorite-label {
+      font-size:.78rem;
+      letter-spacing:.03em;
+      text-transform:uppercase;
+      color:inherit;
+    }
+    .card .favorite-btn:hover {
+      transform:translateY(-1px) scale(1.02);
+      box-shadow:0 16px 28px rgba(122,79,0,.22);
+    }
+    .card .favorite-btn:focus-visible {
+      outline:3px solid rgba(255,193,7,.4);
+      outline-offset:2px;
+    }
+    .card .favorite-btn.active {
+      background:linear-gradient(135deg,#ffe6a0,#ffc107);
+      color:#7a4f00;
+      box-shadow:0 16px 32px rgba(255,175,23,.35);
+    }
+    .card .favorite-btn.active .favorite-icon {
+      animation:pulseStar 2s ease-in-out infinite;
+    }
+    .card.is-favorite {
+      border-color:#ffc107;
+      box-shadow:0 24px 60px rgba(255,193,7,.25);
     }
     .card::before {
       content:"";
@@ -428,6 +525,10 @@
       border-color:rgba(15,142,220,.14);
     }
     .card:hover::before { opacity:1; }
+    @keyframes pulseStar {
+      0%,100% { transform:scale(1); }
+      50% { transform:scale(1.18); }
+    }
     .event-card .thumb {
       width:100%;
       aspect-ratio:4/3;
@@ -449,6 +550,18 @@
     }
     .tag { display:inline-block; padding:6px 16px; border-radius:999px; background:rgba(11,101,198,.12); color:var(--primary-dark); font-size:.85rem; margin-bottom:10px; }
     .meta { font-size:.9rem; color:#457; margin-bottom:12px; }
+    .distance-info {
+      font-size:.85rem;
+      color:#0b5fa4;
+      margin:-4px 0 12px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .distance-info::before {
+      content:"📍";
+      font-size:.95rem;
+    }
     .filters {
       display:flex;
       flex-wrap:wrap;
@@ -459,6 +572,105 @@
       background:rgba(15,142,220,.05);
       border:1px solid rgba(15,142,220,.1);
       box-shadow:inset 0 1px 0 rgba(255,255,255,.4);
+    }
+    .event-tools {
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin:18px 0 6px;
+    }
+    .location-btn {
+      white-space:nowrap;
+      min-width:160px;
+      border-radius:999px;
+      border:1px solid rgba(15,142,220,.3);
+      background:rgba(15,142,220,.05);
+      padding:10px 18px;
+      font-weight:600;
+      color:var(--primary-dark);
+      cursor:pointer;
+      transition:background-color .2s, color .2s, box-shadow .2s;
+    }
+    .location-btn:hover {
+      background:rgba(15,142,220,.12);
+      box-shadow:0 10px 18px rgba(8,57,97,.1);
+    }
+    .location-btn.active {
+      background:var(--primary);
+      color:#fff;
+      border-color:var(--primary);
+      box-shadow:0 12px 22px rgba(15,142,220,.3);
+    }
+    .location-btn.is-loading {
+      pointer-events:none;
+      opacity:.7;
+    }
+    .location-status {
+      font-size:.82rem;
+      color:#45627c;
+      min-height:1em;
+    }
+    .search-field {
+      flex:1 1 260px;
+      position:relative;
+    }
+    .search-field input {
+      width:100%;
+      border-radius:999px;
+      border:1px solid rgba(15,142,220,.18);
+      padding:12px 42px 12px 46px;
+      font-size:.95rem;
+      background:#fff;
+      box-shadow:inset 0 1px 2px rgba(15,142,220,.08);
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .search-field input:focus {
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(15,142,220,.15);
+    }
+    .search-field .search-icon {
+      position:absolute;
+      left:18px;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:1rem;
+      color:rgba(15,142,220,.6);
+      pointer-events:none;
+    }
+    .favorite-toggle {
+      border:1px solid rgba(255,193,7,.4);
+      background:rgba(255,246,196,.9);
+      color:#7a4f00;
+      border-radius:999px;
+      padding:10px 20px;
+      font-weight:600;
+      cursor:pointer;
+      transition:background-color .2s, transform .15s, box-shadow .2s;
+    }
+    .favorite-toggle:hover {
+      transform:translateY(-1px);
+      box-shadow:0 10px 20px rgba(122,79,0,.15);
+    }
+    .favorite-toggle.active {
+      background:#ffaf17;
+      color:#fff;
+      border-color:#ffaf17;
+      box-shadow:0 12px 24px rgba(255,175,23,.3);
+    }
+    .favorite-toggle span {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:22px;
+      height:22px;
+      margin-left:6px;
+      border-radius:50%;
+      background:#fff;
+      color:#7a4f00;
+      font-size:.82rem;
+      font-weight:700;
     }
     .filter-btn {
       border:1px solid rgba(15,142,220,.3);
@@ -938,6 +1150,52 @@
       box-shadow:0 30px 80px rgba(0,0,0,.35);
       border:1px solid rgba(15,142,220,.08);
     }
+    .detail-actions {
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      margin:18px 0 12px;
+    }
+    .detail-actions .action-row {
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:12px;
+    }
+    .detail-actions strong {
+      font-size:.95rem;
+      color:#244;
+    }
+    .calendar-actions .btn {
+      flex:0 0 auto;
+    }
+    .share-buttons {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .share-btn {
+      border:none;
+      border-radius:999px;
+      padding:10px 16px;
+      font-weight:600;
+      cursor:pointer;
+      color:#fff;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:.9rem;
+      transition:transform .15s, box-shadow .2s;
+    }
+    .share-btn:hover {
+      transform:translateY(-1px);
+      box-shadow:0 10px 20px rgba(0,0,0,.18);
+    }
+    .share-btn.kakao { background:#fee500; color:#381f1f; }
+    .share-btn.instagram { background:linear-gradient(45deg,#f09433,#bc1888,#7f3bbd); }
+    .share-btn.facebook { background:#1877f2; }
+    .share-btn.copy { background:#0f8edc; }
+    .share-btn.native { background:#455a64; }
     .close-btn {
       position:absolute;
       top:18px;
@@ -995,6 +1253,36 @@
       background:rgba(0,0,0,.7);
       color:#fff;
     }
+    .toast {
+      position:fixed;
+      bottom:28px;
+      right:32px;
+      min-width:220px;
+      padding:14px 20px;
+      border-radius:14px;
+      background:rgba(6,32,58,.9);
+      color:#fff;
+      box-shadow:0 20px 40px rgba(0,0,0,.2);
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(10px);
+      transition:opacity .3s, transform .3s;
+      z-index:300;
+    }
+    .toast.visible {
+      opacity:1;
+      transform:translateY(0);
+    }
+    .sr-only {
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      border:0;
+    }
     @media (max-width:1200px) {
       .hero .inner {
         grid-template-columns:minmax(0,1fr);
@@ -1041,8 +1329,9 @@
        ⚠️ 반드시 프로토콜(https://)까지 포함하여 입력하세요!
     4. 저장 후 몇 분 대기 (설정 반영까지 최대 10분 소요 가능)
     5. 브라우저 캐시 삭제 후 다시 시도
-  -->
+  -->                                                       <!--자바스크립트 앱 키 여기 등록-->
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d865babc963d6edc39f7371bd8869346"></script>
+  <script src="https://developers.kakao.com/sdk/js/kakao.min.js" defer></script>
 </head>
 <body>
   <div class="view-toggle" role="group" aria-label="화면 모드 전환">
@@ -1137,8 +1426,28 @@
             <p class="event-list-subtext">카테고리를 눌러 원하는 장르만 골라보세요.</p>
           </div>
         </div>
+        <div class="event-tools" aria-label="행사 검색 및 즐겨찾기">
+          <label class="search-field">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="search" id="eventSearch" placeholder="행사 이름, 장소, 태그 검색" aria-label="행사 검색">
+          </label>
+          <button type="button" id="favoriteOnlyBtn" class="favorite-toggle" aria-pressed="false">
+            ⭐ 즐겨찾기만 보기 <span id="favoriteCount">0</span>
+          </button>
+          <button type="button" id="nearbySortBtn" class="location-btn" aria-pressed="false">
+            내 주변 행사 보기
+          </button>
+          <span id="locationStatus" class="location-status" aria-live="polite"></span>
+        </div>
         <div id="filters" class="filters"></div>
         <div id="eventList" class="card-grid"></div>
+        <section id="favoriteSection" class="favorite-section" hidden>
+          <header>
+            <h3 style="margin:0;">내 관심 행사</h3>
+            <p>즐겨찾기한 행사를 한 번에 모아볼 수 있어요.</p>
+          </header>
+          <div id="favoriteList" class="card-grid"></div>
+        </section>
       </div>
     </section>
 
@@ -1156,6 +1465,25 @@
       <h1 id="detailTitle"></h1>
       <p id="detailMeta" class="meta"></p>
       <div id="detailDesc"></div>
+      <div id="detailActions" class="detail-actions" hidden>
+        <div class="action-row">
+          <button id="modalFavoriteBtn" type="button" class="btn secondary">관심 행사 저장</button>
+        </div>
+        <div class="action-row calendar-actions" id="calendarActions">
+          <strong>캘린더 등록</strong>
+          <div class="calendar-buttons">
+            <button type="button" class="btn ghost" data-calendar-target="google">Google 캘린더</button>
+            <button type="button" class="btn ghost" data-calendar-target="ics">ICS 파일</button>
+          </div>
+        </div>
+        <div class="action-row share-group" id="shareGroup">
+          <strong>공유</strong>
+          <div class="share-buttons">
+            <button type="button" class="share-btn kakao" data-share-target="kakao">카카오톡 공유</button>
+            <button type="button" class="share-btn copy" data-share-target="copy">링크주소 복사</button>
+          </div>
+        </div>
+      </div>
       <ul id="detailTags" class="tags"></ul>
       <section id="mapSection" class="map-section">
         <h3>행사 위치 (카카오맵)</h3>       
@@ -1176,6 +1504,8 @@
       <img id="viewerImage" src="" alt="행사 이미지 원본 보기">
     </div>
   </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
     const CULTURE_SPOTS = [
@@ -1236,7 +1566,7 @@
       {id:"chorus",name:"부산국제합창제",category:"음악",period:"2025.07.10 - 07.13",venue:"부산문화회관 대극장",address:"부산 남구 유엔평화로76번길 1",lat:35.12720381116853,lng:129.09343392393183,summary:"세계 합창단 경연 및 갈라 콘서트.",description:"마스터클래스, 시민합창단 프로젝트, 어린이 합창 캠프와 함께 세계 합창 네트워크를 만든다.",extra:"전 세계 합창단이 클래식, 민요, 현대음악 레퍼토리를 선보이며, 시민합창단과의 합동 무대, 오디션을 통한 청소년 합창 아카데미도 함께 진행됩니다.",image:"images/choir_festival.jpg",tags:["합창","클래식","갈라"],related:["classic","rock"]},
       {id:"sea",name:"부산바다축제",category:"음악/축제",period:"2025.08.01 - 08.03",venue:"해운대·광안리·송도 해수욕장",address:"부산 해운대해수욕장",lat:35.158503656035776,lng:129.15986512407855,summary:"해변 전역 K-POP & EDM 파티.",description:"미디어파사드, 서핑 챌린지, 나이트마켓, 친환경 캠페인을 포함한 대표 여름 축제.",extra:"오프닝 콘서트와 DJ 파티, 비치 스포츠 대회, 야간 버스킹이 여러 해수욕장에서 동시에 진행됩니다. 가족과 친구, 연인이 함께 머무르며 여름 밤바다를 즐길 수 있는 대표 바캉스 축제입니다.",image:"images/sea_festival.jpg",tags:["해변","KPOP","야간"],related:["rock","fireworks","light"]},
       {id:"classic",name:"클래식 기획 공연 시리즈",category:"음악",period:"월별",venue:"부산문화회관·시민회관·F1963",address:"부산 남구 유엔평화로76번길 1",lat:35.127337460783124,lng:129.0937828643011,summary:"정기 연주회·협연·실내악 페스티벌.",description:"부산문화회관, 시민회관, F1963에서 오케스트라, 실내악, 현대음악 프로그램을 릴레이로 운영.",extra:"국내외 지휘자와 솔리스트 초청 협연, 젊은 연주자를 소개하는 라이징스타 시리즈, 현대음악·크로스오버 기획까지 포함되어 클래식 팬들의 꾸준한 사랑을 받습니다.",image:"https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=900&q=80",tags:["클래식","레지던시","F1963"],related:["chorus","biennale"]},
-      {id:"biennale",name:"부산비엔날레 2024",category:"전시",period:"2024.08.17 - 10.20",venue:"부산시립미술관·F1963",address:"부산 해운대구 APEC로 58",lat:35.16671910012939,lng:129.13705071290875,summary:"국제 현대미술제, 테마 ‘Sea of Memory’.",description:"다국적 작가 80여 명 참여, 수변 설치, 아티스트 토크, 커뮤니티 랩 프로그램으로 구성.",extra:"해양 도시 부산의 역사와 기억을 주제로 설치, 영상, 퍼포먼스가 전시되며, 작가와의 만남, 워크숍, 도시 투어 프로그램이 함께 기획됩니다.",image:"images/bieenale.jpg",tags:["현대미술","F1963","전시"],related:["artfair","photo","museum"]},
+      {id:"biennale",name:"2024 부산비엔날레",category:"전시",period:"2024.08.17 - 10.20",venue:"부산시립미술관·F1963",address:"부산 해운대구 APEC로 58",lat:35.16671910012939,lng:129.13705071290875,summary:"국제 현대미술제, 테마 ‘Sea of Memory’.",description:"다국적 작가 80여 명 참여, 수변 설치, 아티스트 토크, 커뮤니티 랩 프로그램으로 구성.",extra:"해양 도시 부산의 역사와 기억을 주제로 설치, 영상, 퍼포먼스가 전시되며, 작가와의 만남, 워크숍, 도시 투어 프로그램이 함께 기획됩니다.",image:"images/bieenale.jpg",tags:["현대미술","F1963","전시"],related:["artfair","photo","museum"]},
       {id:"artfair",name:"2025 유라시아부산국제아트페어",category:"전시",period:"2025.12.04 - 12.07",venue:"벡스코 제2전시장",address:"부산 해운대구 APEC로 30",lat:35.1657004614896,lng:129.13502680140527,summary:"국제 아트페어, 180개 갤러리.",description:"VIP 컬렉터 프로그램, 아트토크, NFT라운지, 청년작가 존, 부산 프라이즈 시상식을 운영.",extra:"국내외 유수 갤러리가 참가해 회화, 조각, 사진, 미디어아트 작품을 선보이며, 컬렉터 라운지와 아트 토크, 키즈 아트 프로그램이 운영됩니다.",image:"images/art_busan.png",tags:["아트페어","벡스코","컬렉터"],related:["biennale","photo"]},
       {id:"photo",name:"부산국제사진제",category:"전시",period:"2025.09.24 - 10.23",venue:"F1963·영화의전당 라운지",address:"부산 해운대구 수영강변대로 120",lat:35.171025221008584,lng:129.12702012511946,summary:"사진 전문 전시 행사.",description:"국제 큐레이터 초청전, 아티스트 토크, 포트폴리오 리뷰, 포토북 페어를 포함.",extra:"국내외 사진가들의 개인전·그룹전과 함께, 포트폴리오 리뷰, 출판사와 함께하는 포토북 마켓, 작가 강연 등이 열려 사진 작업 흐름을 한눈에 볼 수 있습니다.",image:"images/photo_festival.png",tags:["사진","큐레이션","토크"],related:["biennale","artfair"]},
       {id:"museum",name:"부산시립·현대미술관 기획전",category:"전시",period:"상시",venue:"부산시립미술관 외",address:"부산 해운대구 APEC로 58",lat:35.16663692129298,lng:129.137111662703,summary:"동시대 이슈를 다루는 기획전 릴레이.",description:"시립·현대미술관에서 로컬 레지던시, 미디어아트, 어린이 미술교육 전시를 순환 개최.",extra:"지역 작가 전, 국제 공동 기획전, 어린이·청소년 대상 체험형 전시 등 다양한 층을 아우르며, 도슨트 투어와 교육 프로그램이 상시 운영됩니다.",image:"https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",tags:["공공미술관","레지던시","교육"],related:["biennale","photo"]},
@@ -1252,18 +1582,251 @@
       {id:"anchovy",name:"기장 멸치축제",category:"축제",period:"2025.04.25 - 04.27",venue:"기장 대변항",address:"부산 기장군 기장읍 대변리 274-17",lat:35.22051828102901,lng:129.23086179039657,summary:"봄철 멸치 풍어를 기원하는 향토 축제.",description:"멸치잡이 체험, 활멸치 회&구이 시식, 어선 퍼레이드, 음악 공연을 즐길 수 있다.",extra:"대변항 포구를 따라 멸치 요리 시식 부스와 특산물 장터가 펼쳐지고, 어선 퍼레이드와 어촌 문화 체험 프로그램이 함께 열립니다. 바다를 보며 라이브 공연을 즐길 수 있는 작은 무대도 마련됩니다.",image:"images/anchovy_festival.jpg",tags:["어촌","향토","푸드"],related:["sand","sea"]}
     ];
 
+    const EVENT_LINKS = {
+      biff:"https://www.biff.kr/kor/",
+      bshort:"https://www.bisff.org/",
+      biky:"https://www.biky.or.kr/home",
+      indieplus:"https://mobile.dureraum.org:44500/bccm/main/main.do?rbsIdx=1",
+      bnkcinema:"https://www.instagram.com/corner_theater/",
+      rock:"https://busanrockfestival.com/",
+      chorus:"https://www.busanchoral.org/eng/",
+      sea:"https://festivalbusan.com/seafestival/",
+      classic:"https://www.bscc.or.kr/main/",
+      biennale:"https://busanbiennale2024.com/ko",
+      artfair:"http://www.biaf.co.kr/",
+      photo:"http://w.bipf.kr/2025/",
+      museum:"https://www.busan.go.kr/moca/exhibition01",
+      theater:"https://www.bipaf.org/",
+      dance:"https://www.bidf.kr/",
+      smallplay:"http://www.blta.co.kr/00_main/main.asp",
+      fireworks:"https://busanfireworks.com/",
+      sunrise:"https://busan.grandculture.net/Contents?local=busan&dataType=01&contents_id=GC04214107",
+      gamcheon:"https://www.saha.go.kr/tour/contents.do?mId=0202000000",
+      light:"https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=b3b7a23c-c7f6-45db-930a-b139e4d8cd9f",
+      sand:"https://www.haeundae.go.kr/index.do?menuCd=DOM_000000309005011000",
+      chinatown:"https://www.visitbusan.net/index.do?menuCd=DOM_000000201005001000&uc_seq=414&lang_cd=ko&pagingParms=4ca15f3a76a21f554a6e515f5344f50c4f734814d27260977c0eb574b1e0019a33f5a8e2dd587a9efb82cc91cf112987488312a3bc08c3054da8c190c930f6592e7894a7ed3cf424c17bc506baa57feb0aa608ee54ad79feb8b43e0becf2aedf306446a26175f37928b2e64d297ab48f8acfae3743ce2794ef15d99eb793341329c53a76d24a81ef72a11ca917970aac34400ec0365d93e364d7a859d58178e212648c28901350cb20330ec09b4e8c7ee5e2b8287a2a6536a889e832bf7d31f847bff6a467836ed9d75537b39410af399cbcba9ee6702cb3dbdfc37118061bdc6242d2505ff463a634757c4ad1fb5316c17e3c6c881b1202936a9591f574a9b458fe7ada378c8e24a939d38009efceb2f1d2f3d9fb0a84335999d70d74a175a02229fcd269f25ecae09cba47d7fa5b4ca79471889a1020e6226a199377b97ead69d777bcce27c101be7225c1ffeb0036367494277c22e6ec9cff0114e7cadf3a2d867367262d1b5f6a717ace24b4cae0734d3410c3de7cbbe8e8e2de4a08c9f7f2d71419b760deedc85bfd092d20cf83296e62049d974032c50fee7f8aa0e20719104acb04653baa264be502ef0f1cca19faf72dfd77b0bf1930b929eb2ee93dbea2f5bff2d9ad4661906d2630252c7a77755caae6cc44ce63bad15ddb06615ce3b6b3e2ad2ade8ddc56b9a8835779c8968497af73b9cee2d26904ec9ddb2852944561dc3a786f3e5c68c8e0e32ae35abb0978563b823f553103c0757fd7e769114895883f6c30f8d9107f51b43406263d9ba68fff184ad872b9b0efeefd8d3a2a809eb15b6818f12446d25d8cd7efecc255394911058317",
+      anchovy:"https://www.gijang.go.kr/tour/index.gijang?menuCd=DOM_000000302000000000"
+    };
+
     const featuredEl = document.getElementById("featured");
     const eventListEl = document.getElementById("eventList");
     const filtersEl = document.getElementById("filters");
+    const favoriteSectionEl = document.getElementById("favoriteSection");
+    const favoriteListEl = document.getElementById("favoriteList");
+    const eventSearchInput = document.getElementById("eventSearch");
+    const favoriteOnlyBtn = document.getElementById("favoriteOnlyBtn");
+    const favoriteCountEl = document.getElementById("favoriteCount");
     const cultureGalleryEl = document.getElementById("cultureGallery");
     const historyTimelineEl = document.getElementById("historyTimeline");
     const viewToggle = document.querySelector(".view-toggle");
     const viewToggleButtons = viewToggle ? viewToggle.querySelectorAll("button") : [];
     const VIEW_STORAGE_KEY = "busan-view-mode";
+    const FAVORITE_STORAGE_KEY = "busan-favorites";
     const MOBILE_BREAKPOINT = "(max-width: 768px)";
     const mobileMediaQuery = window.matchMedia(MOBILE_BREAKPOINT);
+    const KAKAO_SHARE_KEY = "d865babc963d6edc39f7371bd8869346";
     const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone|Mobi/i.test(navigator.userAgent);
     let userSelectedView = false;
+    let favorites = new Set();
+    let currentCategory = "전체";
+    let currentSearchTerm = "";
+    let favoriteOnly = false;
+    let currentEventId = null;
+    let searchDebounceTimer = null;
+    let userLocation = null;
+    let sortMode = "default";
+    let locatingUser = false;
+
+    function getClosest(target, selector) {
+      if (!target) return null;
+      if (typeof target.closest === "function") {
+        return target.closest(selector);
+      }
+      let node = target.parentElement;
+      while (node) {
+        if (node.matches(selector)) return node;
+        node = node.parentElement;
+      }
+      return null;
+    }
+
+    function getAbsoluteUrl(path) {
+      try {
+        return new URL(path, window.location.href).toString();
+      } catch (err) {
+        return path;
+      }
+    }
+
+    function buildEventPageUrl(id) {
+      const url = new URL(window.location.href);
+      if (id) {
+        url.searchParams.set("event", id);
+      } else {
+        url.searchParams.delete("event");
+      }
+      url.hash = "";
+      return url.toString();
+    }
+
+    function getOfficialLink(id) {
+      return EVENT_LINKS[id] || null;
+    }
+
+    function copyOfficialLink(id) {
+      const officialLink = getOfficialLink(id);
+      const linkToCopy = officialLink || buildEventPageUrl(id);
+      copyToClipboard(linkToCopy);
+      showToast(officialLink ? "행사 공식 링크를 복사했어요." : "행사 페이지 링크를 복사했어요.");
+    }
+
+    const EARTH_RADIUS_KM = 6371;
+    function deg2rad(value) {
+      return value * (Math.PI / 180);
+    }
+
+    function calculateDistance(lat1, lng1, lat2, lng2) {
+      if ([lat1,lng1,lat2,lng2].some(coord => typeof coord !== "number" || Number.isNaN(coord))) {
+        return null;
+      }
+      const dLat = deg2rad(lat2 - lat1);
+      const dLng = deg2rad(lng2 - lng1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return +(EARTH_RADIUS_KM * c).toFixed(2);
+    }
+
+    function formatDistanceLabel(distance) {
+      if (typeof distance !== "number" || Number.isNaN(distance)) return "";
+      if (distance < 1) {
+        return `${Math.round(distance * 1000)}m`;
+      }
+      return distance < 10 ? `${distance.toFixed(1)}km` : `${Math.round(distance)}km`;
+    }
+
+    function updateLocationUI() {
+      if (nearbySortBtn) {
+        nearbySortBtn.classList.toggle("active", sortMode === "distance" && !!userLocation);
+        nearbySortBtn.classList.toggle("is-loading", locatingUser);
+        nearbySortBtn.setAttribute("aria-pressed", sortMode === "distance" && !!userLocation);
+        if (locatingUser) {
+          nearbySortBtn.textContent = "위치 확인 중...";
+        } else if (sortMode === "distance" && userLocation) {
+          nearbySortBtn.textContent = "내 주변 순 정렬 해제";
+        } else {
+          nearbySortBtn.textContent = "내 주변 행사 보기";
+        }
+      }
+      if (locationStatusEl) {
+        if (locatingUser) {
+          locationStatusEl.textContent = "현재 위치를 확인하는 중입니다...";
+        } else if (sortMode === "distance" && userLocation) {
+          locationStatusEl.textContent = "가까운 행사부터 정렬했습니다.";
+        } else if (userLocation) {
+          locationStatusEl.textContent = "기본 정렬로 표시 중입니다.";
+        } else {
+          locationStatusEl.textContent = "";
+        }
+      }
+    }
+
+    function requestUserLocation() {
+      if (!navigator.geolocation) {
+        showToast("이 브라우저에서는 위치 정보를 사용할 수 없습니다.");
+        return;
+      }
+      locatingUser = true;
+      updateLocationUI();
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          userLocation = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          };
+          locatingUser = false;
+          sortMode = "distance";
+          updateLocationUI();
+          renderList();
+          renderFavoriteSection();
+          showToast("내 주변 행사 순으로 정렬했습니다.");
+        },
+        err => {
+          locatingUser = false;
+          updateLocationUI();
+          const messages = {
+            1: "위치 접근이 거부되었습니다.",
+            2: "위치 정보를 확인할 수 없습니다.",
+            3: "위치 정보를 가져오는 데 시간이 초과되었습니다."
+          };
+          showToast(messages[err.code] || "위치 정보를 가져올 수 없습니다.");
+        },
+        { enableHighAccuracy:false, timeout:8000, maximumAge:0 }
+      );
+    }
+
+    function clearLocationSorting() {
+      sortMode = "default";
+      updateLocationUI();
+      renderList();
+      renderFavoriteSection();
+      showToast("기본 정렬로 돌아갔어요.");
+    }
+
+    function getAbsoluteUrl(path) {
+      try {
+        return new URL(path, window.location.href).toString();
+      } catch (err) {
+        return path;
+      }
+    }
+
+    function ensureKakaoReady() {
+      if (typeof Kakao === "undefined") {
+        console.warn("카카오 SDK가 로드되지 않았습니다.");
+        showToast("카카오 SDK를 불러오지 못했습니다.");
+        return false;
+      }
+      if (!KAKAO_SHARE_KEY || KAKAO_SHARE_KEY.includes("YOUR_")) {
+        console.warn("KAKAO_SHARE_KEY 를 실제 JavaScript 키로 교체하세요.");
+        showToast("카카오 공유 키가 설정되어 있지 않습니다.");
+        return false;
+      }
+      if (!Kakao.isInitialized()) {
+        Kakao.init(KAKAO_SHARE_KEY);
+      }
+      return true;
+    }
+
+    function shareViaKakao(event) {
+      if (!ensureKakaoReady()) return;
+      const shareUrl = buildEventPageUrl(event.id);
+      const imageUrl = getAbsoluteUrl(event.image || IMAGE_FALLBACK);
+      Kakao.Share.sendDefault({
+        objectType:"feed",
+        content:{
+          title:event.name,
+          description:event.summary || event.description || "",
+          imageUrl,
+          link:{
+            mobileWebUrl:shareUrl,
+            webUrl:shareUrl
+          }
+        },
+        buttons:[
+          {
+            title:"행사 카드 보기",
+            link:{
+              mobileWebUrl:shareUrl,
+              webUrl:shareUrl
+            }
+          }
+        ]
+      });
+      showToast("카카오톡 공유 패널을 열었습니다.");
+    }
 
     function setToggleActive(mode) {
       viewToggleButtons.forEach(btn => {
@@ -1296,7 +1859,7 @@
 
     if (viewToggle) {
       viewToggle.addEventListener("click", e => {
-        const target = e.target.closest("button[data-view]");
+        const target = getClosest(e.target, "button[data-view]");
         if (!target) return;
         userSelectedView = true;
         applyDeviceMode(target.dataset.view);
@@ -1330,19 +1893,30 @@
     }
 
     function renderCards(data, container) {
-      container.innerHTML = data.map(item => `
-        <article class="card event-card">
+      if (!container) return;
+      container.innerHTML = data.map(item => {
+        const isFavorite = favorites.has(item.id);
+        const distanceMarkup = typeof item.distance === "number" ? `<p class="distance-info">내 위치에서 약 ${formatDistanceLabel(item.distance)}</p>` : "";
+        return `
+        <article class="card event-card ${isFavorite ? "is-favorite" : ""}">
+          <button type="button" class="favorite-btn ${isFavorite ? "active" : ""}" data-fav-toggle="${item.id}" aria-pressed="${isFavorite}">
+            <span class="favorite-icon" aria-hidden="true">${isFavorite ? "★" : "☆"}</span>
+            <span class="favorite-label">${isFavorite ? "저장됨" : "찜하기"}</span>
+            <span class="sr-only">${isFavorite ? "즐겨찾기 해제" : "즐겨찾기 추가"}</span>
+          </button>
           <div class="thumb">
             <img src="${item.image}" alt="${item.name}" onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}';">
           </div>
           <span class="tag">${item.category}</span>
           <h3>${item.name}</h3>
           <p class="meta">${item.period} · ${item.venue}</p>
+          ${distanceMarkup}
           <p>${item.summary}</p>
           <button class="btn primary" style="margin-top:14px;" data-type="event" data-id="${item.id}">
             자세히 보기
           </button>
-        </article>`).join("");
+        </article>`;
+      }).join("");
     }
 
     function buildCultureGalleryCard(item) {
@@ -1398,28 +1972,151 @@
       `).join("");
     }
 
-    function initFeatured() {
+    function renderFeatured() {
+      if (!featuredEl) return;
       renderCards(EVENTS.slice(0,4), featuredEl);
+    }
+
+    function loadFavorites() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(FAVORITE_STORAGE_KEY) || "[]");
+        favorites = new Set(Array.isArray(stored) ? stored : []);
+      } catch (err) {
+        console.warn("즐겨찾기 정보를 불러오지 못했습니다:", err);
+        favorites = new Set();
+      }
+    }
+
+    function saveFavorites() {
+      try {
+        localStorage.setItem(FAVORITE_STORAGE_KEY, JSON.stringify([...favorites]));
+      } catch (err) {
+        console.warn("즐겨찾기 저장 실패:", err);
+      }
+    }
+
+    function updateFavoriteToggleState() {
+      if (!favoriteOnlyBtn || !favoriteCountEl) return;
+      favoriteCountEl.textContent = favorites.size;
+      favoriteOnlyBtn.classList.toggle("active", favoriteOnly);
+      favoriteOnlyBtn.setAttribute("aria-pressed", favoriteOnly);
+    }
+
+    function updateModalFavoriteState() {
+      if (!modalFavoriteBtn) return;
+      if (!currentEventId) {
+        modalFavoriteBtn.classList.remove("active");
+        modalFavoriteBtn.textContent = "관심 행사 저장";
+        return;
+      }
+      const isFavorite = favorites.has(currentEventId);
+      modalFavoriteBtn.classList.toggle("active", isFavorite);
+      modalFavoriteBtn.textContent = isFavorite ? "즐겨찾기 해제" : "관심 행사 저장";
+    }
+
+    function renderFavoriteSection() {
+      if (!favoriteSectionEl || !favoriteListEl) return;
+      const favoriteData = EVENTS
+        .filter(event => favorites.has(event.id))
+        .map(event => {
+          if (!userLocation) return event;
+          return {
+            ...event,
+            distance: calculateDistance(userLocation.lat, userLocation.lng, event.lat, event.lng)
+          };
+        });
+      favoriteSectionEl.hidden = favoriteData.length === 0;
+      if (favoriteData.length === 0) {
+        favoriteListEl.innerHTML = "";
+        return;
+      }
+      renderCards(favoriteData, favoriteListEl);
+    }
+
+    function toggleFavorite(id, { silent = false } = {}) {
+      if (!id) return;
+      const isFavorite = favorites.has(id);
+      if (isFavorite) {
+        favorites.delete(id);
+      } else {
+        favorites.add(id);
+      }
+      saveFavorites();
+      updateFavoriteToggleState();
+      renderList();
+      renderFeatured();
+      renderFavoriteSection();
+      if (currentEventId === id) {
+        updateModalFavoriteState();
+      }
+      if (!silent) {
+        showToast(isFavorite ? "즐겨찾기에서 제외했어요." : "즐겨찾기에 추가했어요.");
+      }
     }
 
     function initFilters() {
       const categorySet = new Set();
       EVENTS.forEach(e => e.category.split("/").map(cat => cat.trim()).forEach(cat => categorySet.add(cat)));
       const cats = ["전체", ...categorySet];
-      filtersEl.innerHTML = cats.map((c,i)=>`<button class="filter-btn ${i===0?"active":""}" data-cat="${c}">${c}</button>`).join("");
+      filtersEl.innerHTML = cats.map(cat => `
+        <button class="filter-btn ${currentCategory === cat ? "active" : ""}" data-cat="${cat}">${cat}</button>
+      `).join("");
       filtersEl.addEventListener("click", e => {
-        if (!e.target.matches(".filter-btn")) return;
+        const target = getClosest(e.target, ".filter-btn");
+        if (!target) return;
         [...filtersEl.children].forEach(btn => btn.classList.remove("active"));
-        e.target.classList.add("active");
-        renderList(e.target.dataset.cat);
+        target.classList.add("active");
+        currentCategory = target.dataset.cat || "전체";
+        renderList();
       });
     }
 
-    function renderList(category="전체") {
-      const filtered = category==="전체"
-        ? EVENTS
-        : EVENTS.filter(e => e.category.split("/").map(cat => cat.trim()).includes(category));
-      renderCards(filtered, eventListEl);
+    function getFilteredEvents() {
+      return EVENTS.filter(event => {
+        const categories = event.category.split("/").map(cat => cat.trim());
+        const matchesCategory = currentCategory === "전체" || categories.includes(currentCategory);
+        const matchesFavorite = !favoriteOnly || favorites.has(event.id);
+        if (!matchesCategory || !matchesFavorite) return false;
+        if (!currentSearchTerm) return true;
+        const searchTarget = [
+          event.name,
+          event.summary,
+          event.description,
+          event.venue,
+          categories.join(" "),
+          (event.tags || []).join(" ")
+        ].join(" ").toLowerCase();
+        return searchTarget.includes(currentSearchTerm);
+      });
+    }
+
+    function renderList() {
+      if (!eventListEl) return;
+      let filtered = getFilteredEvents();
+      let prepared = filtered.map(event => {
+        if (!userLocation) return event;
+        return {
+          ...event,
+          distance: calculateDistance(userLocation.lat, userLocation.lng, event.lat, event.lng)
+        };
+      });
+      if (sortMode === "distance" && userLocation) {
+        prepared = prepared.sort((a, b) => {
+          const distA = typeof a.distance === "number" ? a.distance : Number.POSITIVE_INFINITY;
+          const distB = typeof b.distance === "number" ? b.distance : Number.POSITIVE_INFINITY;
+          return distA - distB;
+        });
+      }
+      if (prepared.length === 0) {
+        eventListEl.innerHTML = `
+          <div class="empty-state">
+            조건에 맞는 행사가 없습니다.<br>
+            <small>검색어와 필터를 조정해 보세요.</small>
+          </div>
+        `;
+        return;
+      }
+      renderCards(prepared, eventListEl);
     }
 
     function initTabs() {
@@ -1449,6 +2146,10 @@
     function openEventDetail(id) {
       const data = EVENTS.find(e => e.id === id);
       if (!data) return;
+      currentEventId = id;
+      setDetailActionsVisible(true);
+      updateEventParam(id);
+      updateModalFavoriteState();
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
       detailImage.style.display = "block";
@@ -1553,6 +2254,10 @@
     function openCultureDetail(id) {
       const data = CULTURE_SPOTS.find(c => c.id === id);
       if (!data) return;
+      currentEventId = null;
+      updateEventParam(null);
+      setDetailActionsVisible(false);
+      updateModalFavoriteState();
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
       // 지역 문화 카드는 상단 이미지를 사용하지 않음
@@ -1580,6 +2285,190 @@
       }
     }
 
+    function setDetailActionsVisible(isVisible) {
+      if (!detailActions) return;
+      detailActions.hidden = !isVisible;
+    }
+
+    function updateEventParam(id) {
+      if (!window.history || !window.history.replaceState) return;
+      const url = new URL(window.location.href);
+      if (id) {
+        url.searchParams.set("event", id);
+      } else {
+        url.searchParams.delete("event");
+      }
+      window.history.replaceState({}, "", url);
+    }
+
+    function getCurrentEvent() {
+      if (!currentEventId) return null;
+      return EVENTS.find(event => event.id === currentEventId) || null;
+    }
+
+    function handleCalendarAction(target) {
+      const event = getCurrentEvent();
+      if (!event) {
+        showToast("행사를 먼저 선택해주세요.");
+        return;
+      }
+      const dates = parsePeriodToDates(event.period);
+      if (!dates) {
+        showToast("행사 기간 형식을 인식할 수 없습니다.");
+        return;
+      }
+      if (target === "google") {
+        window.open(buildGoogleCalendarUrl(event, dates), "_blank", "noopener");
+      } else {
+        downloadIcs(event, dates);
+        showToast("ICS 파일을 내려받았어요.");
+      }
+    }
+
+    function parsePeriodToDates(period) {
+      if (!period) return null;
+      const parts = period.split(/[-~]/).map(p => p.trim()).filter(Boolean);
+      const start = parseDatePart(parts[0]);
+      const end = parts[1] ? parseDatePart(parts[1], start && start.getFullYear()) : start;
+      if (!start || !end) return null;
+      return { start, end };
+    }
+
+    function parseDatePart(part, fallbackYear) {
+      if (!part) return null;
+      const digits = part.replace(/[^\d.]/g, "").split(".").filter(Boolean);
+      if (digits.length < 2) return null;
+      let year, month, day;
+      if (digits.length === 3) {
+        [year, month, day] = digits;
+      } else {
+        [month, day] = digits;
+        year = fallbackYear ? String(fallbackYear) : null;
+      }
+      if (!year) return null;
+      const m = Number(month || 1);
+      const d = Number(day || 1);
+      if (!m || !d) return null;
+      return new Date(Number(year), m - 1, d);
+    }
+
+    function addDays(date, days) {
+      const result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+
+    function formatDateValue(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}${month}${day}`;
+    }
+
+    function buildGoogleCalendarUrl(event, dates) {
+      const start = formatDateValue(dates.start);
+      const end = formatDateValue(addDays(dates.end, 1));
+      const details = `${event.summary || ""}\n${event.description || ""}\n${event.extra || ""}`.trim();
+      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${start}/${end}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(event.venue)}`;
+    }
+
+    function buildIcsContent(event, dates) {
+      const start = formatDateValue(dates.start);
+      const end = formatDateValue(addDays(dates.end, 1));
+      const description = `${event.summary || ""}\\n${event.description || ""}\\n${event.extra || ""}`.trim();
+      return [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Busan Culture Calendar//KR",
+        "CALSCALE:GREGORIAN",
+        "BEGIN:VEVENT",
+        `UID:${event.id}@busan-culture`,
+        `DTSTAMP:${start}T090000Z`,
+        `DTSTART;VALUE=DATE:${start}`,
+        `DTEND;VALUE=DATE:${end}`,
+        `SUMMARY:${event.name}`,
+        `DESCRIPTION:${description}`,
+        `LOCATION:${event.venue}`,
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ].join("\n");
+    }
+
+    function downloadIcs(event, dates) {
+      const blob = new Blob([buildIcsContent(event, dates)], { type:"text/calendar" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `${event.id || "busan-event"}.ics`;
+      anchor.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function handleShare(target) {
+      const event = getCurrentEvent();
+      if (!event) {
+        showToast("행사를 먼저 선택해주세요.");
+        return;
+      }
+      if (target === "kakao") {
+        shareViaKakao(event);
+        return;
+      }
+      if (target === "copy") {
+        copyOfficialLink(event.id);
+        return;
+      }
+      showToast("지원하지 않는 공유 방식입니다.");
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "absolute";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+
+    let toastTimer;
+    function showToast(message) {
+      if (!toastEl) return;
+      toastEl.textContent = message;
+      toastEl.classList.add("visible");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastEl.classList.remove("visible");
+      }, 2200);
+    }
+
+    function handleInitialEventFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const targetId = params.get("event");
+      if (targetId && EVENTS.some(ev => ev.id === targetId)) {
+        openEventDetail(targetId);
+      }
+    }
+
+    function closeModal() {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      currentEventId = null;
+      setDetailActionsVisible(false);
+      updateModalFavoriteState();
+      updateEventParam(null);
+    }
+
     const modal = document.getElementById("detailModal");
     const detailImage = document.getElementById("detailImage");
     const detailCategory = document.getElementById("detailCategory");
@@ -1593,12 +2482,19 @@
     const mapSectionEl = document.getElementById("mapSection");
     const imageViewer = document.getElementById("imageViewer");
     const viewerImage = document.getElementById("viewerImage");
+    const detailActions = document.getElementById("detailActions");
+    const modalFavoriteBtn = document.getElementById("modalFavoriteBtn");
+    const calendarButtons = document.querySelectorAll("[data-calendar-target]");
+    const shareButtons = document.querySelectorAll("[data-share-target]");
+    const toastEl = document.getElementById("toast");
+    const nearbySortBtn = document.getElementById("nearbySortBtn");
+    const locationStatusEl = document.getElementById("locationStatus");
 
     document.body.addEventListener("click", e => {
-      const btn = e.target.closest(".btn");
-      if (!btn || (!btn.closest(".card") && !btn.closest(".related"))) return;
-      const id = btn.dataset.id;
-      const type = btn.dataset.type || "event";
+      const detailBtn = getClosest(e.target, "button[data-id][data-type]");
+      if (!detailBtn) return;
+      const id = detailBtn.dataset.id;
+      const type = detailBtn.dataset.type || "event";
       if (!id) return;
       if (type === "culture") {
         openCultureDetail(id);
@@ -1608,15 +2504,22 @@
     });
 
     document.body.addEventListener("click", e => {
-      const viewerTrigger = e.target.closest("[data-view-image]");
+      const favoriteBtn = getClosest(e.target, "[data-fav-toggle]");
+      if (!favoriteBtn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFavorite(favoriteBtn.dataset.favToggle);
+    });
+
+    document.body.addEventListener("click", e => {
+      const viewerTrigger = getClosest(e.target, "[data-view-image]");
       if (!viewerTrigger) return;
       openImageViewer(viewerTrigger.dataset.viewImage, viewerTrigger.dataset.viewAlt);
     });
 
     modal.addEventListener("click", e => {
       if (e.target === modal || e.target.matches(".close-btn")) {
-        modal.classList.remove("open");
-        modal.setAttribute("aria-hidden", "true");
+        closeModal();
         return;
       }
       if (e.target === detailImage) {
@@ -1630,14 +2533,74 @@
       }
     });
 
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        if (imageViewer.classList.contains("open")) {
+          closeImageViewer();
+        } else if (modal.classList.contains("open")) {
+          closeModal();
+        }
+      }
+    });
+
+    if (favoriteOnlyBtn) {
+      favoriteOnlyBtn.addEventListener("click", () => {
+        favoriteOnly = !favoriteOnly;
+        updateFavoriteToggleState();
+        renderList();
+      });
+    }
+
+    if (eventSearchInput) {
+      eventSearchInput.addEventListener("input", e => {
+        const value = (e.target.value || "").toLowerCase();
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(() => {
+          currentSearchTerm = value.trim();
+          renderList();
+        }, 180);
+      });
+    }
+
+    if (modalFavoriteBtn) {
+      modalFavoriteBtn.addEventListener("click", () => {
+        if (!currentEventId) return;
+        toggleFavorite(currentEventId);
+      });
+    }
+
+    calendarButtons.forEach(btn => {
+      btn.addEventListener("click", () => handleCalendarAction(btn.dataset.calendarTarget));
+    });
+
+    shareButtons.forEach(btn => {
+      btn.addEventListener("click", () => handleShare(btn.dataset.shareTarget));
+    });
+
+    if (nearbySortBtn) {
+      nearbySortBtn.addEventListener("click", () => {
+        if (locatingUser) return;
+        if (sortMode === "distance" && userLocation) {
+          clearLocationSorting();
+        } else {
+          requestUserLocation();
+        }
+      });
+      updateLocationUI();
+    }
+
     initViewMode();
+    loadFavorites();
+    updateFavoriteToggleState();
     renderCulture("cultureList");
     renderCultureGallery();
     renderHistoryTimeline();
     initTabs();
-    initFeatured();
     initFilters();
+    renderFeatured();
     renderList();
+    renderFavoriteSection();
+    handleInitialEventFromQuery();
 
     // 페이지 로드 시 카카오맵 API 상태 확인
     window.addEventListener('load', () => {
