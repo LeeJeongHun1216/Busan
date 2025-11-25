@@ -902,7 +902,15 @@
     body.device-mobile .card .favorite-btn .favorite-icon {
       filter:drop-shadow(0 0 6px rgba(255,220,100,.9));
     }
-  
+
+    body.device-mobile .favorite-info-text {
+      color:#000 !important;
+    }
+
+    body.device-mobile .favorite-section header h3 {
+      color:#000 !important;
+    }
+
     .featured-section {
       position:relative;
       overflow:hidden;
@@ -1458,7 +1466,7 @@
         <section id="favoriteSection" class="favorite-section" hidden>
           <header>
             <h3 style="margin:0;">내 관심 행사</h3>
-            <p>즐겨찾기한 행사를 한 번에 모아볼 수 있어요.</p>
+            <p class="favorite-info-text">즐겨찾기한 행사를 한 번에 모아볼 수 있어요.</p>
           </header>
           <div id="favoriteList" class="card-grid"></div>
         </section>
