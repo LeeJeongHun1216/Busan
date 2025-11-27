@@ -16,10 +16,7 @@
     * { box-sizing:border-box; }
     body {
       margin:0;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(53,211,255,.25), transparent 55%),
-        radial-gradient(circle at 80% 0%, rgba(15,142,220,.25), transparent 55%),
-        linear-gradient(135deg, #edf7ff 0%, #f8fbff 45%, #eef6ff 100%);
+      background:#d8ecff;
       color:var(--text);
       line-height:1.6;
       -webkit-font-smoothing:antialiased;
@@ -29,14 +26,7 @@
     }
     body::before,
     body::after {
-      content:"";
-      position:fixed;
-      width:520px;
-      height:520px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(15,142,220,.18), transparent 70%);
-      z-index:-1;
-      filter:blur(0);
+      content:none;
     }
     body::before {
       top:-120px;
@@ -356,12 +346,7 @@
       z-index:1;
     }
     main::before {
-      content:"";
-      position:absolute;
-      inset:0;
-      background:radial-gradient(circle at 50% -180px, rgba(15,142,220,.15), transparent 60%);
-      pointer-events:none;
-      z-index:-1;
+      content:none;
     }
     main > section {
       background:rgba(255,255,255,.85);
@@ -372,9 +357,12 @@
       border:1px solid rgba(15,142,220,.05);
     }
     main > section.tab-hub {
-      background:transparent;
-      box-shadow:none;
-      padding:0;
+      background:#f5f9ff;
+      border-radius:32px;
+      padding:32px clamp(18px,4vw,40px);
+      box-shadow:0 30px 60px rgba(7,37,63,.12);
+      border:1px solid rgba(15,142,220,.08);
+      min-height:100vh;
     }
     main > section.info-ribbon {
       background:linear-gradient(135deg, rgba(15,142,220,.08), rgba(53,211,255,.18));
@@ -870,6 +858,9 @@
     body.device-mobile .modal-card p {
       color:rgba(240,246,255,.86);
     }
+    body.device-mobile #detailDesc p {
+      color:rgba(247,250,255,.94) !important;
+    }
     body.device-mobile .detail-img {
       max-height:240px;
       border-radius:18px;
@@ -977,14 +968,104 @@
     }
     .tab-panel {
       display:none;
-      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(237,247,255,.95));
+      background:#f5f9ff;
       border-radius:24px;
       padding:32px;
-      box-shadow:0 25px 50px rgba(8,57,97,.12);
-      border:1px solid rgba(15,142,220,.06);
-      backdrop-filter:blur(6px);
+      box-shadow:none;
+      border:none;
+      backdrop-filter:none;
     }
     .tab-panel.active { display:block; }
+    .calendar-section {
+      margin-top:30px;
+      background:#f5f9ff;
+      border-radius:32px;
+      padding:32px clamp(18px,4vw,40px);
+      box-shadow:0 30px 60px rgba(7,37,63,.12);
+      border:1px solid rgba(15,142,220,.08);
+    }
+    .calendar-section header {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:16px;
+      align-items:flex-end;
+      margin-bottom:20px;
+    }
+    .calendar-section header p {
+      margin:6px 0 0;
+      color:#506482;
+      font-size:.92rem;
+    }
+    .calendar-controls {
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .calendar-controls button {
+      border:none;
+      background:rgba(15,142,220,.1);
+      color:#0b5fa4;
+      padding:8px 14px;
+      border-radius:12px;
+      font-weight:600;
+      cursor:pointer;
+      transition:background-color .2s, transform .15s;
+    }
+    .calendar-controls button:hover {
+      background:rgba(15,142,220,.18);
+      transform:translateY(-1px);
+    }
+    .calendar-controls strong {
+      min-width:90px;
+      text-align:center;
+      font-size:1.1rem;
+    }
+    .calendar-grid {
+      display:grid;
+      grid-template-columns:repeat(7,minmax(0,1fr));
+      gap:12px;
+    }
+    .calendar-cell {
+      background:#fff;
+      border-radius:18px;
+      padding:14px;
+      min-height:140px;
+      box-shadow:0 16px 30px rgba(8,57,97,.08);
+      border:1px solid rgba(15,142,220,.08);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .calendar-cell.is-muted {
+      opacity:.35;
+    }
+    .calendar-date {
+      font-weight:700;
+      font-size:1rem;
+      color:#0b3c63;
+    }
+    .calendar-events {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      flex:1;
+    }
+    .calendar-event-chip {
+      border:none;
+      background:rgba(15,142,220,.08);
+      border-radius:12px;
+      padding:6px 10px;
+      font-size:.85rem;
+      text-align:left;
+      color:#0b3c63;
+      cursor:pointer;
+      transition:background-color .2s, transform .15s;
+    }
+    .calendar-event-chip:hover {
+      background:rgba(15,142,220,.2);
+      transform:translateY(-1px);
+    }
     .culture-card { display:flex; flex-direction:column; position:relative; }
     .culture-header { display:flex; flex-direction:column; gap:4px; margin-bottom:6px; }
     .culture-header h3 { margin:4px 0 0; font-size:1.15rem; }
@@ -1473,6 +1554,21 @@
       </div>
     </section>
 
+    <section class="calendar-section" aria-label="행사 캘린더">
+      <header>
+        <div>
+          <h2>행사 캘린더</h2>
+          <p>월별 일정으로 빠르게 확인하고, 날짜를 눌러 상세 정보를 확인하세요.</p>
+        </div>
+        <div class="calendar-controls">
+          <button type="button" aria-label="이전 달" data-calendar-nav="-1">◀</button>
+          <strong id="calendarCurrentLabel" aria-live="polite">2025.11</strong>
+          <button type="button" aria-label="다음 달" data-calendar-nav="1">▶</button>
+        </div>
+      </header>
+      <div class="calendar-grid" id="calendarGrid" role="grid" aria-label="부산 문화 행사 달력"></div>
+    </section>
+
     <section class="info-ribbon">
       <div><strong>카테고리</strong><p>영화 · 공연 · 음악 · 축제 · 전시</p></div>
       <div><strong>핵심 장소</strong><p>영화의전당, 해운대, 삼락생태공원, F1963</p></div>
@@ -1640,6 +1736,8 @@
     const favoriteCountEl = document.getElementById("favoriteCount");
     const cultureGalleryEl = document.getElementById("cultureGallery");
     const historyTimelineEl = document.getElementById("historyTimeline");
+    const calendarGridEl = document.getElementById("calendarGrid");
+    const calendarLabelEl = document.getElementById("calendarCurrentLabel");
     const viewToggle = document.querySelector(".view-toggle");
     const viewToggleButtons = viewToggle ? viewToggle.querySelectorAll("button") : [];
     const VIEW_STORAGE_KEY = "busan-view-mode";
@@ -1658,6 +1756,9 @@
     let userLocation = null;
     let sortMode = "default";
     let locatingUser = false;
+    const calendarNavButtons = document.querySelectorAll("[data-calendar-nav]");
+    let calendarCurrentDate = new Date();
+    calendarCurrentDate.setDate(1);
 
     function getClosest(target, selector) {
       if (!target) return null;
@@ -2349,7 +2450,7 @@
 
     function parsePeriodToDates(period) {
       if (!period) return null;
-      const parts = period.split(/[-~]/).map(p => p.trim()).filter(Boolean);
+      const parts = period.split(/[-~,]/).map(p => p.trim()).filter(Boolean);
       const start = parseDatePart(parts[0]);
       const end = parts[1] ? parseDatePart(parts[1], start && start.getFullYear()) : start;
       if (!start || !end) return null;
@@ -2424,6 +2525,62 @@
       anchor.download = `${event.id || "busan-event"}.ics`;
       anchor.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function getEventStartDate(event) {
+      if (!event) return null;
+      const dates = parsePeriodToDates(event.period);
+      return dates ? dates.start : null;
+    }
+
+    function renderCalendarView() {
+      if (!calendarGridEl || !calendarLabelEl) return;
+      const year = calendarCurrentDate.getFullYear();
+      const month = calendarCurrentDate.getMonth();
+      calendarLabelEl.textContent = `${year}.${String(month + 1).padStart(2, "0")}`;
+      const firstDay = new Date(year, month, 1);
+      const startWeekday = firstDay.getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const totalCells = Math.ceil((startWeekday + daysInMonth) / 7) * 7;
+      const eventsByDay = EVENTS.reduce((acc, event) => {
+        const startDate = getEventStartDate(event);
+        if (!startDate) return acc;
+        if (startDate.getFullYear() !== year || startDate.getMonth() !== month) return acc;
+        const day = startDate.getDate();
+        (acc[day] = acc[day] || []).push(event);
+        return acc;
+      }, {});
+      let cells = "";
+      for (let index = 0; index < totalCells; index++) {
+        const dayNumber = index - startWeekday + 1;
+        const inMonth = dayNumber > 0 && dayNumber <= daysInMonth;
+        const eventsForDay = inMonth && eventsByDay[dayNumber] ? eventsByDay[dayNumber] : [];
+        const ariaLabel = inMonth ? `${year}년 ${month + 1}월 ${dayNumber}일` : "이전/다음 달";
+        let content = "&nbsp;";
+        if (inMonth && eventsForDay.length) {
+          content = eventsForDay.map(event => `
+            <button type="button" class="calendar-event-chip" data-type="event" data-id="${event.id}">
+              ${event.name}
+            </button>
+          `).join("");
+        }
+        cells += `
+          <div class="calendar-cell ${inMonth ? "" : "is-muted"}" role="gridcell" aria-label="${ariaLabel}">
+            <div class="calendar-date">${inMonth ? dayNumber : ""}</div>
+            <div class="calendar-events">
+              ${content}
+            </div>
+          </div>
+        `;
+      }
+      calendarGridEl.innerHTML = cells;
+    }
+
+    function changeCalendarMonth(offset) {
+      if (!Number.isFinite(offset)) return;
+      calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() + offset);
+      calendarCurrentDate.setDate(1);
+      renderCalendarView();
     }
 
     function handleShare(target) {
@@ -2599,6 +2756,16 @@
       btn.addEventListener("click", () => handleShare(btn.dataset.shareTarget));
     });
 
+    if (calendarNavButtons.length) {
+      calendarNavButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const offset = Number(btn.dataset.calendarNav);
+          if (Number.isNaN(offset)) return;
+          changeCalendarMonth(offset);
+        });
+      });
+    }
+
     if (nearbySortBtn) {
       nearbySortBtn.addEventListener("click", () => {
         if (locatingUser) return;
@@ -2622,6 +2789,7 @@
     renderFeatured();
     renderList();
     renderFavoriteSection();
+    renderCalendarView();
     handleInitialEventFromQuery();
 
     // 페이지 로드 시 카카오맵 API 상태 확인
