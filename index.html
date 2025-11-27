@@ -1886,11 +1886,11 @@
     const viewToggle = document.querySelector(".view-toggle");
     const viewToggleButtons = viewToggle ? viewToggle.querySelectorAll("button") : [];
     const VIEW_STORAGE_KEY = "busan-view-mode";
-    const FAVORITE_STORAGE_KEY = "busan-favorites";
     const MOBILE_BREAKPOINT = "(max-width: 768px)";
     const mobileMediaQuery = window.matchMedia(MOBILE_BREAKPOINT);
-    const KAKAO_SHARE_KEY = "d865babc963d6edc39f7371bd8869346";
     const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone|Mobi/i.test(navigator.userAgent);
+    const FAVORITE_STORAGE_KEY = "busan-favorites";
+    const KAKAO_SHARE_KEY = "d865babc963d6edc39f7371bd8869346";
     let userSelectedView = false;
     let favorites = new Set();
     let currentCategory = "전체";
@@ -1919,12 +1919,65 @@
       return null;
     }
 
-    function getAbsoluteUrl(path) {
+    function setToggleActive(mode) {
+      viewToggleButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.view === mode);
+      });
+    }
+
+    function storeViewMode(mode) {
       try {
-        return new URL(path, window.location.href).toString();
+        localStorage.setItem(VIEW_STORAGE_KEY, mode);
       } catch (err) {
-        return path;
+        console.warn("뷰 모드 저장 실패:", err);
       }
+    }
+
+    function applyDeviceMode(mode, { skipPersist = false } = {}) {
+      const targetMode = mode === "mobile" ? "mobile" : "pc";
+      document.body.classList.toggle("device-mobile", targetMode === "mobile");
+      if (viewToggle) {
+        setToggleActive(targetMode);
+      }
+      if (!skipPersist) {
+        storeViewMode(targetMode);
+      }
+    }
+
+    function handleViewportChange(e) {
+      if (userSelectedView) return;
+      applyDeviceMode(e.matches ? "mobile" : "pc", { skipPersist:true });
+    }
+
+    function initViewMode() {
+      let stored = null;
+      try {
+        stored = localStorage.getItem(VIEW_STORAGE_KEY);
+      } catch (err) {
+        console.warn("뷰 모드 불러오기 실패:", err);
+      }
+      if (stored) {
+        userSelectedView = true;
+        applyDeviceMode(stored, { skipPersist:true });
+        return;
+      }
+      const prefersMobile = mobileMediaQuery.matches || isMobileUserAgent;
+      applyDeviceMode(prefersMobile ? "mobile" : "pc", { skipPersist:true });
+    }
+
+    if (viewToggle) {
+      viewToggle.addEventListener("click", e => {
+        const target = getClosest(e.target, "button[data-view]");
+        if (!target) return;
+        userSelectedView = true;
+        applyDeviceMode(target.dataset.view);
+      });
+    }
+
+    if (typeof mobileMediaQuery.addEventListener === "function") {
+      mobileMediaQuery.addEventListener("change", handleViewportChange);
+    } else if (typeof mobileMediaQuery.addListener === "function") {
+      mobileMediaQuery.addListener(handleViewportChange);
     }
 
     function buildEventPageUrl(id) {
@@ -2144,70 +2197,6 @@
         ]
       });
       showToast("카카오톡 공유 패널을 열었습니다.");
-    }
-
-    function setToggleActive(mode) {
-      viewToggleButtons.forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.view === mode);
-      });
-    }
-
-    function storeViewMode(mode) {
-      try {
-        localStorage.setItem(VIEW_STORAGE_KEY, mode);
-      } catch (err) {
-        console.warn("view mode 저장 실패:", err);
-      }
-    }
-
-    function applyDeviceMode(mode, { skipPersist = false } = {}) {
-      if (mode === "mobile") {
-        document.body.classList.add("device-mobile");
-      } else {
-        document.body.classList.remove("device-mobile");
-        mode = "pc";
-      }
-      if (viewToggle) {
-        setToggleActive(mode);
-      }
-      if (!skipPersist) {
-        storeViewMode(mode);
-      }
-    }
-
-    if (viewToggle) {
-      viewToggle.addEventListener("click", e => {
-        const target = getClosest(e.target, "button[data-view]");
-        if (!target) return;
-        userSelectedView = true;
-        applyDeviceMode(target.dataset.view);
-      });
-    }
-
-    function handleViewportChange(e) {
-      if (userSelectedView) return;
-      applyDeviceMode(e.matches ? "mobile" : "pc", { skipPersist:true });
-    }
-
-    if (typeof mobileMediaQuery.addEventListener === "function") {
-      mobileMediaQuery.addEventListener("change", handleViewportChange);
-    } else if (typeof mobileMediaQuery.addListener === "function") {
-      mobileMediaQuery.addListener(handleViewportChange);
-    }
-
-    function initViewMode() {
-      let stored = null;
-      try {
-        stored = localStorage.getItem(VIEW_STORAGE_KEY);
-      } catch (err) {
-        console.warn("view mode 읽기 실패:", err);
-      }
-      if (stored) {
-        userSelectedView = true;
-      }
-      const prefersMobile = mobileMediaQuery.matches || isMobileUserAgent;
-      const initialMode = stored || (prefersMobile ? "mobile" : "pc");
-      applyDeviceMode(initialMode, { skipPersist: Boolean(stored) });
     }
 
     function renderCards(data, container) {
@@ -2461,10 +2450,26 @@
       detailImage.alt = altText;
     }
 
+    function toggleEventOnlySections(isEventCard) {
+      const sections = [calendarActions, shareGroup];
+      sections.forEach(section => {
+        if (!section) return;
+        section.hidden = !isEventCard;
+        section.setAttribute("aria-hidden", String(!isEventCard));
+        section.style.display = isEventCard ? "" : "none";
+        const buttons = section.querySelectorAll("button");
+        buttons.forEach(btn => {
+          btn.disabled = !isEventCard;
+          btn.setAttribute("aria-disabled", String(!isEventCard));
+        });
+      });
+    }
+
     function openEventDetail(id) {
       const data = EVENTS.find(e => e.id === id);
       if (!data) return;
       currentEventId = id;
+      toggleEventOnlySections(true);
       setDetailActionsVisible(true);
       updateEventParam(id);
       updateModalFavoriteState();
@@ -2574,6 +2579,7 @@
       if (!data) return;
       currentEventId = null;
       updateEventParam(null);
+      toggleEventOnlySections(false);
       setDetailActionsVisible(false);
       updateModalFavoriteState();
       modal.classList.add("open");
@@ -2606,6 +2612,15 @@
     function setDetailActionsVisible(isVisible) {
       if (!detailActions) return;
       detailActions.hidden = !isVisible;
+      detailActions.style.display = isVisible ? "" : "none";
+      detailActions.setAttribute("aria-hidden", String(!isVisible));
+      const toggleButtonState = btn => {
+        if (!btn) return;
+        btn.disabled = !isVisible;
+        btn.setAttribute("aria-disabled", String(!isVisible));
+      };
+      calendarButtons.forEach(toggleButtonState);
+      shareButtons.forEach(toggleButtonState);
     }
 
     function updateEventParam(id) {
@@ -2895,6 +2910,7 @@
       modal.classList.remove("open");
       modal.setAttribute("aria-hidden", "true");
       currentEventId = null;
+      toggleEventOnlySections(false);
       setDetailActionsVisible(false);
       updateModalFavoriteState();
       updateEventParam(null);
@@ -2915,6 +2931,8 @@
     const viewerImage = document.getElementById("viewerImage");
     const detailActions = document.getElementById("detailActions");
     const modalFavoriteBtn = document.getElementById("modalFavoriteBtn");
+    const calendarActions = document.getElementById("calendarActions");
+    const shareGroup = document.getElementById("shareGroup");
     const calendarButtons = document.querySelectorAll("[data-calendar-target]");
     const shareButtons = document.querySelectorAll("[data-share-target]");
     const toastEl = document.getElementById("toast");
@@ -2974,6 +2992,8 @@
         }
       }
     });
+
+    toggleEventOnlySections(false);
 
     if (favoriteOnlyBtn) {
       favoriteOnlyBtn.addEventListener("click", () => {
