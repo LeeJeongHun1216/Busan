@@ -552,7 +552,7 @@ const featuredEl = document.getElementById("featured");
       const data = EVENTS.find(e => e.id === id);
       if (!data) return;
       currentEventId = id;
-      setDetailActionsVisible(true);
+      configureDetailActionRows({ favorite:true, calendar:true, share:true });
       updateEventParam(id);
       updateModalFavoriteState();
       modal.classList.add("open");
@@ -661,7 +661,7 @@ const featuredEl = document.getElementById("featured");
       if (!data) return;
       currentEventId = null;
       updateEventParam(null);
-      setDetailActionsVisible(false);
+      configureDetailActionRows({ favorite:false, calendar:false, share:false });
       updateModalFavoriteState();
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
@@ -693,6 +693,18 @@ const featuredEl = document.getElementById("featured");
     function setDetailActionsVisible(isVisible) {
       if (!detailActions) return;
       detailActions.hidden = !isVisible;
+    }
+
+    function configureDetailActionRows({ favorite = true, calendar = true, share = true } = {}) {
+      const applyVisibility = (element, isVisible) => {
+        if (!element) return;
+        element.hidden = !isVisible;
+        element.style.display = isVisible ? "" : "none";
+      };
+      applyVisibility(favoriteActionRow, favorite);
+      applyVisibility(calendarActionsRow, calendar);
+      applyVisibility(shareGroupRow, share);
+      setDetailActionsVisible(Boolean(favorite || calendar || share));
     }
 
     function updateEventParam(id) {
@@ -983,6 +995,7 @@ const featuredEl = document.getElementById("featured");
       modal.setAttribute("aria-hidden", "true");
       currentEventId = null;
       setDetailActionsVisible(false);
+      configureDetailActionRows({ favorite:true, calendar:true, share:true });
       updateModalFavoriteState();
       updateEventParam(null);
     }
@@ -1000,14 +1013,19 @@ const featuredEl = document.getElementById("featured");
     const mapSectionEl = document.getElementById("mapSection");
     const imageViewer = document.getElementById("imageViewer");
     const viewerImage = document.getElementById("viewerImage");
-    const detailActions = document.getElementById("detailActions");
+const detailActions = document.getElementById("detailActions");
+const favoriteActionRow = document.getElementById("favoriteActionRow");
     const modalFavoriteBtn = document.getElementById("modalFavoriteBtn");
+const calendarActionsRow = document.getElementById("calendarActions");
     const calendarButtons = document.querySelectorAll("[data-calendar-target]");
+const shareGroupRow = document.getElementById("shareGroup");
     const shareButtons = document.querySelectorAll("[data-share-target]");
     const toastEl = document.getElementById("toast");
     const nearbySortBtn = document.getElementById("nearbySortBtn");
     const locationStatusEl = document.getElementById("locationStatus");
     const weeklySummaryEl = document.getElementById("weeklySummary");
+
+configureDetailActionRows({ favorite:true, calendar:true, share:true });
 
     document.body.addEventListener("click", e => {
       const detailBtn = getClosest(e.target, "button[data-id][data-type]");
